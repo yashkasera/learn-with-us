@@ -1,5 +1,6 @@
 import json
 
+
 # import firebase_admin
 # from firebase_admin import credentials, firestore
 #
@@ -11,7 +12,7 @@ import json
 
 
 def get_audio(keywords: list, only_one: bool = False):
-    sounds = []
+    res = {}
     with open("sounds.json", "r") as file:
         ls = json.load(file)
         for keyword in keywords:
@@ -19,8 +20,7 @@ def get_audio(keywords: list, only_one: bool = False):
             for doc in ls:
                 if keyword in doc["keywords"]:
                     flag = 1
-                    sounds.append({keyword: doc['media']})
-                    print(f"Found {keyword}")
+                    res[keyword] = doc['media']
                     break
             if flag == 1 and only_one:
                 break
@@ -28,8 +28,8 @@ def get_audio(keywords: list, only_one: bool = False):
                 print(f"Could not find {keyword}")
                 # db.collection(u'report').document(u'model').update({keyword: firestore.Increment(1)})
         file.close()
-    if len(sounds) > 0:
-        return sounds
+    if len(res.keys()) > 0:
+        return res
     return None
 
 
